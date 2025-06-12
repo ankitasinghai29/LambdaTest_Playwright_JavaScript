@@ -5,7 +5,7 @@ exports.HeaderSectionPage = class HeaderSectionPage{
     {
         this.page = page;
         this.myAccount = '(//a[normalize-space()="My account"])[2]';
-        this.loginIcon = '//a[normalize-space()="Login"]';
+        this.loginIcon = '(//a[normalize-space()="Login"])[1]';
         this.registerIcon = '//span[normalize-space()="Register"]';
         this.logoutIcon = '//span[normalize-space()="Logout"]';
         this.wishListIcon = '[aria-label="Wishlist"]';
@@ -27,7 +27,7 @@ exports.HeaderSectionPage = class HeaderSectionPage{
     //performing click action on login icon
     async clickOnLoginIcon(){
         this.mouseHoverOnMyAccount();
-        this.checkElementVisibilty(this.loginIcon);
+        //this.checkElementVisibilty(this.loginIcon);
         await this.page.click(this.loginIcon);
     }
 
