@@ -4,6 +4,7 @@ import {faker} from '@faker-js/faker'
 import fs from 'fs'
 import path from 'path'
 
+//This class is used to handle elements of the register web page
 exports.RegisterUserPage = class RegisterUserPage{
     
     constructor(page)
@@ -33,6 +34,7 @@ exports.RegisterUserPage = class RegisterUserPage{
         await expect(this.page.locator(this.privacyPolicy)).toBeVisible();
     } 
 
+    //for generating random user data for registration
     async generateRandomData()
     {
         const firstName = faker.person.firstName();
@@ -43,6 +45,7 @@ exports.RegisterUserPage = class RegisterUserPage{
         return [firstName,lastName,telephone,email,password];
     }
 
+    //fill the data to the registration form
     async fillRandomData(fname,lname,tele,email,pass)
     {
         await this.page.fill(this.firstName,fname);
@@ -83,6 +86,7 @@ exports.RegisterUserPage = class RegisterUserPage{
 
     }
 
+    //register user with existing email
     async registerWithExistingUser()
     {
         const header = new HeaderSectionPage(this.page);
@@ -95,6 +99,7 @@ exports.RegisterUserPage = class RegisterUserPage{
         await expect(this.page.locator(this.warningMessage)).toBeVisible();
     }
 
+    //register user without selecting privacu policy checkbox
     async registerWithoutCheckPolicy()
     {
         const header = new HeaderSectionPage(this.page);
@@ -109,6 +114,7 @@ exports.RegisterUserPage = class RegisterUserPage{
         await expect(this.page.locator(this.warningMessage)).toBeVisible();
     }
 
+    //register user with partial data
     async registerWithPartialData()
     {
         const header = new HeaderSectionPage(this.page);

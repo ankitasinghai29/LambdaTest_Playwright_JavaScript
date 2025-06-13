@@ -1,6 +1,7 @@
 import { HeaderSectionPage } from "./HeaderSectionPage";
 import { expect } from "@playwright/test";
 
+//This class is used to handle elements of the login web page
 exports.LoginLogoutPage = class LoginLogoutPage{
     constructor(page)
     {
@@ -26,23 +27,34 @@ exports.LoginLogoutPage = class LoginLogoutPage{
         this.checkElementVisibilty(this.usernameField);
         this.checkElementVisibilty(this.passwordField);
         this.checkElementVisibilty(this.loginButton);
+        
         await this.page.fill(this.usernameField,username);
         await this.page.fill(this.passwordField,password);
+        
         await this.page.click(this.loginButton);
     }
 
-    //performing click action on regiter link available on login page
+    //performing click action on regiter link or contionue button under new customer available on login page
     async clickOnRegisterLink(){
+        const header = new HeaderSectionPage(this.page);
+        await header.clickOnLoginIcon();
+        await this.page.waitForTimeout(3000);
         this.checkElementVisibilty(this.RegisterLink);
-        await this.page.click(this.RegisterLink);
-    }
-
-    //performing click action on contionue button under new customer available on login page
-    async clickOnRegisterLink(){
         this.checkElementVisibilty(this.continueButton);
-        await this.page.click(this.continueButton);
+
+        const random = Math.floor(Math.random() * 2) + 1;
+        if(random==1)
+        {
+            await this.page.click(this.RegisterLink);
+        }
+        else
+        {
+            await this.page.click(this.continueButton);
+        }
+        await expect(this.page.locator(this.RegisterLink)).toHaveCSS('background-color', 'rgb(14, 186, 197)');
     }
 
+    //check the visibility of the warning message on invalid action
     async getWarningMessage()
     {
         await this.checkElementVisibilty(this.warningMessage);

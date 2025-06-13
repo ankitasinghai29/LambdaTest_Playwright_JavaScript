@@ -3,6 +3,7 @@ import {LoginLogoutPage} from './LoginLogoutPage'
 import loginData from '../TestData/UserData.json'
 import { expect } from '@playwright/test';
 
+//this class is used to handle elements of the my Account page
 exports.MyAccountPage = class MyAccountPage {
     
     constructor(page)
@@ -30,6 +31,7 @@ exports.MyAccountPage = class MyAccountPage {
         await login.getLoginIntoApp(username,password);
     }
 
+    //navigate to my account page after login
     async getMyAccountPage()
     {
         await this.loginIntoApp();
@@ -49,6 +51,7 @@ exports.MyAccountPage = class MyAccountPage {
         await expect(this.page.locator(this.myAccountLink)).toHaveCSS('background-color', 'rgb(14, 186, 197)');
     }
 
+    //navigate to edit account page
     async getEditAccountPage() {
         await this.loginIntoApp();
         await this.page.waitForTimeout(3000);
@@ -64,6 +67,7 @@ exports.MyAccountPage = class MyAccountPage {
         await expect(this.page.locator(this.editAccountLink)).toHaveCSS('background-color', 'rgb(14, 186, 197)');
     }
 
+    //navigate to wishlist page
     async getWishlistPage() {
         await this.loginIntoApp();
         await this.page.waitForTimeout(3000);
@@ -79,6 +83,7 @@ exports.MyAccountPage = class MyAccountPage {
         await expect(this.page.locator(this.wishlistLink)).toHaveCSS('background-color', 'rgb(14, 186, 197)');
     }
 
+    //navigate to order history page
     async getOrderHistoryPage() {
         await this.loginIntoApp();
         await this.page.waitForTimeout(3000);
@@ -94,6 +99,7 @@ exports.MyAccountPage = class MyAccountPage {
         await expect(this.page.locator(this.orderHistoryLink)).toHaveCSS('background-color', 'rgb(14, 186, 197)');
     }
 
+    //navigate to address book page
     async getAddressBookPage() {
         await this.loginIntoApp();
         await this.page.waitForTimeout(3000);

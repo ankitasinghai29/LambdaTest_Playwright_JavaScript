@@ -1,5 +1,6 @@
 import { expect } from "@playwright/test";
 
+//This class is used to handle top header (Menu Bar) elements of the web page which is common to all pages
 exports.HeaderSectionPage = class HeaderSectionPage{
     constructor(page)
     {
