@@ -12,6 +12,7 @@ exports.LoginLogoutPage = class LoginLogoutPage{
         this.warningMessage = '(//div[contains(@class,"alert")])[3]';
         this.RegisterLink = '(//a[normalize-space()="Register"])[2]';
         this.continueButton = '//a[normalize-space()="Continue"]';
+        this.logoutLink = '(//a[normalize-space()="Logout"])[2]';
     }
 
     //checking the visibility of element (genralize function)
@@ -58,5 +59,11 @@ exports.LoginLogoutPage = class LoginLogoutPage{
     async getWarningMessage()
     {
         await this.checkElementVisibilty(this.warningMessage);
+    }
+
+    //logout from application
+    async clickOnLogoutLink(){
+        this.page.click(this.logoutLink);
+        await expect(this.page).toHaveTitle('Account Logout');
     }
 }

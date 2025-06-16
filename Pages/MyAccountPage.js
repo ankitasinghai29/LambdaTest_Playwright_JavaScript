@@ -21,14 +21,15 @@ exports.MyAccountPage = class MyAccountPage {
         this.addressBookIcon = '//a[normalize-space()="Modify your address book entries"]';
         this.addressBookLink = '//a[normalize-space()="Address Book"]';
         this.logoutLink = '(//a[normalize-space()="Logout"])[2]';
+        this.login;
     }
 
     //Login into the application
     async loginIntoApp(){
         const username = loginData.username;
         const password = loginData.password;
-        const login = new LoginLogoutPage(this.page);
-        await login.getLoginIntoApp(username,password);
+        this.login = new LoginLogoutPage(this.page);
+        await this.login.getLoginIntoApp(username,password);
     }
 
     //navigate to my account page after login
@@ -115,5 +116,9 @@ exports.MyAccountPage = class MyAccountPage {
         }
         await expect(this.page.locator(this.addressBookLink)).toHaveCSS('background-color', 'rgb(14, 186, 197)');
 
+    }
+
+    async logoutFromApp(){
+        await this.login.clickOnLogoutLink();
     }
 }
