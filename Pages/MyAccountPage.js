@@ -118,6 +118,24 @@ exports.MyAccountPage = class MyAccountPage {
 
     }
 
+    //navigate to change password page
+    async getChangePasswordPage() {
+        await this.loginIntoApp();
+        await this.page.waitForTimeout(3000);
+        const random = Math.floor(Math.random() * 2) + 1;
+        console.log(random);
+        if(random==1)
+        {
+            await this.page.click(this.changePasswordIcon);
+        }
+        else
+        {
+            await this.page.click(this.passwordLink);
+        }
+        await expect(this.page.locator(this.passwordLink)).toHaveCSS('background-color', 'rgb(14, 186, 197)');
+
+    }
+
     async logoutFromApp(){
         await this.login.clickOnLogoutLink();
     }
