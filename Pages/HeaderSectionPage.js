@@ -11,6 +11,7 @@ exports.HeaderSectionPage = class HeaderSectionPage{
         this.logoutIcon = '//span[normalize-space()="Logout"]';
         this.wishListIcon = '[aria-label="Wishlist"]';
         this.cartIcon = '(//div[@class="cart-icon"])[1]';
+        this.megaMenu = '//span[normalize-space()="Mega Menu"]';
     }
 
     //checking the visibility of element (genralize function)
@@ -57,4 +58,21 @@ exports.HeaderSectionPage = class HeaderSectionPage{
         this.checkElementVisibilty(this.cartIcon);
         await this.page.click(this.cartIcon);
     }
+
+    async getBrandItemsUnderMegaMenu(itemBrand)
+    {
+        await this.page.locator(this.megaMenu).hover();
+        await this.page.waitForTimeout(3000);
+        await this.page.click(`//a[@title="${itemBrand}"]`); //use ` instead of '
+        await expect(this.page).toHaveTitle(itemBrand);
+    }
+
+    async getItemUnderMegaMenu(itemBrand,itemName)
+    {
+        await this.getBrandItemsUnderMegaMenu(itemBrand);
+        await this.page.click(`//a[text()="${itemName}"]`);
+        await expect(this.page).toHaveTitle(itemName);
+    }
+
+
 }
