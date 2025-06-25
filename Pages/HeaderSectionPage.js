@@ -9,6 +9,7 @@ exports.HeaderSectionPage = class HeaderSectionPage{
         this.loginIcon = '(//a[normalize-space()="Login"])[1]';
         this.registerIcon = '//span[normalize-space()="Register"]';
         this.logoutIcon = '//span[normalize-space()="Logout"]';
+        this.myOrderIcon = '//span[normalize-space()="My order"]';
         this.wishListIcon = '[aria-label="Wishlist"]';
         this.cartIcon = '(//div[@class="cart-icon"])[1]';
         this.megaMenu = '//span[normalize-space()="Mega Menu"]';
@@ -57,6 +58,13 @@ exports.HeaderSectionPage = class HeaderSectionPage{
     async clickOnCartIcon(){
         this.checkElementVisibilty(this.cartIcon);
         await this.page.click(this.cartIcon);
+    }
+
+    async clickOnMyOrder()
+    {
+        this.mouseHoverOnMyAccount();
+        this.checkElementVisibilty(this.myOrderIcon);
+        await this.page.click(this.myOrderIcon);
     }
 
     async getBrandItemsUnderMegaMenu(itemBrand)

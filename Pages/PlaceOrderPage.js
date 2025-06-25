@@ -1,0 +1,83 @@
+import {MyAccountPage} from './MyAccountPage'
+import {HeaderSectionPage} from './HeaderSectionPage'
+import { expect } from '@playwright/test'
+
+exports.PlaceOrderPage = class PlaceOrderPage{
+    constructor(page)
+    {
+        this.page = page;
+        this.checkoutButtonOnPopUp = '(//div[@id="entry_217849"]/div/a)[2]';
+        //this.checkoutButtonOnPage = '//a[text()="Checkout"]';
+        this.existingAddressRadioButton = '(//label[text()="I want to use an existing address"])[1]';
+        this.newAddressRadioButton = '(//label[text()="I want to use a new address"])[1]';
+        this.addressDropDown = '//select[@name="address_id"]';
+        this.termsConditionCheckbox = '(//label[text()="I have read and agree to the "])[2]';
+        this.continueButton = '//button[normalize-space()="Continue"]';
+        this.confirmOrderButton = 'button[id="button-confirm"]';
+        this.continueShoppingButton = '//a[text()="Continue"]';
+
+        //locators of new address
+        this.firstName = '#input-payment-firstname';
+        this.lastName = '#input-payment-lastname';
+        this.address = '#input-payment-address-1';
+        this.city = '#input-payment-city';
+        this.country = '#input-payment-country';
+        this.state = '#input-payment-zone';
+
+
+        this.myAccount = new MyAccountPage(this.page);
+        this.header = new HeaderSectionPage(this.page);
+
+    }
+
+    async loginIntoApp() {
+        await this.myAccount.loginIntoApp();
+    }
+
+    async placeOrderOnExistingAddress()
+    {
+       await this.header.clickOnCartIcon();
+       await this.page.click(this.checkoutButtonOnPopUp);
+       await expect(this.page).toHaveTitle('Checkout');
+       await this.page.check(this.existingAddressRadioButton);
+       await this.page.selectOption(this.addressDropDown,{index:1});
+       await this.page.check(this.termsConditionCheckbox);
+       await this.page.click(this.continueButton);
+       await expect(this.page).toHaveTitle('Confirm Order');
+       await this.page.click(this.confirmOrderButton);
+       await expect(this.page).toHaveTitle('Your order has been placed!');
+       await this.page.click(this.continueShoppingButton);
+       await expect(this.page).toHaveTitle('Your Store');
+    }
+
+    async placeOrderOnNewAddress()
+    {
+       await this.header.clickOnCartIcon();
+       await this.page.click(this.checkoutButtonOnPopUp);
+       await expect(this.page).toHaveTitle('Checkout');
+       await this.page.click(this.newAddressRadioButton);
+       await this.enterNewAddressDetails();
+       await this.page.check(this.termsConditionCheckbox);
+       await this.page.click(this.continueButton);
+       await expect(this.page).toHaveTitle('Confirm Order');
+       await this.page.click(this.confirmOrderButton);
+       await expect(this.page).toHaveTitle('Your order has been placed!');
+       await this.page.click(this.continueShoppingButton);
+       await expect(this.page).toHaveTitle('Your Store');
+    }
+
+    async enterNewAddressDetails()
+    {
+        await this.page.fill(this.firstName,'Bhavika');
+        await this.page.fill(this.lastName,'Jain');
+        await this.page.fill(this.address,'Marathalli');
+        await this.page.fill(this.city,'Chennai');
+        await this.page.locator(this.country).selectOption('India');
+        await this.page.locator(this.state).selectOption('Tamil Nadu');
+    }
+
+    async placeOrderOnDifferentAddress()
+    {
+
+    }
+}
