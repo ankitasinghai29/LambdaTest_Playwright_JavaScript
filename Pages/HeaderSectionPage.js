@@ -13,6 +13,11 @@ exports.HeaderSectionPage = class HeaderSectionPage{
         this.wishListIcon = '[aria-label="Wishlist"]';
         this.cartIcon = '(//div[@class="cart-icon"])[1]';
         this.megaMenu = '//span[normalize-space()="Mega Menu"]';
+        this.compareIcon = '#entry_217823 a';
+        this.searchBar = '(//input[@name="search"])[1]';
+        this.searchButton = '//button[text()="Search"]';
+        this.categoryDropDown = '(//div[@class="dropdown search-category"])[1]/button';
+        this.categorySelect='//div[@class="dropdown-menu dropdown-menu-left show"]';
     }
 
     //checking the visibility of element (genralize function)
@@ -82,5 +87,31 @@ exports.HeaderSectionPage = class HeaderSectionPage{
         await expect(this.page).toHaveTitle(itemName);
     }
 
+    async clickOnCompareIcon()
+    {
+        await this.page.click(this.compareIcon);
+        
+    }
+
+    async searchProduct(options={})
+    {
+        let title="Search - ";
+        let item = options.item ? options.item : "null";
+        let category = options.category ? options.category : "null";
+        if(item!="null")
+        {
+            await this.page.locator(this.searchBar).fill(item);
+            title = title +item;
+        }
+        if(category!="null")
+        {
+            await this.page.locator(this.categoryDropDown).click();
+            await this.page.locator(this.categorySelect).locator(`//a[text()="${category}"]`).click();
+        }
+        await this.page.click(this.searchButton);
+        
+        
+        await expect(this.page).toHaveTitle(title);
+    }
 
 }

@@ -24,6 +24,16 @@ exports.PlaceOrderPage = class PlaceOrderPage{
         this.country = '#input-payment-country';
         this.state = '#input-payment-zone';
 
+        //if have different shipping and billing address
+        this.differentShippingAddressCheckBox = '//label[contains(text(),"delivery")]';
+        this.shippingAddressDropDown = '//select[@name="shipping[address_id]"]';
+
+        //if item is out of stock or not available
+        this.notAvailableMsg = '//div[contains(text(),"not available")]';
+
+        //if empty cart list
+        this.emptyCartListMsg = 'Your shopping cart is empty!';
+        this.emptyCartMsgOnPage = '(//p[text()="Your shopping cart is empty!"])[1]';
 
         this.myAccount = new MyAccountPage(this.page);
         this.header = new HeaderSectionPage(this.page);
@@ -34,13 +44,8 @@ exports.PlaceOrderPage = class PlaceOrderPage{
         await this.myAccount.loginIntoApp();
     }
 
-    async placeOrderOnExistingAddress()
+    async checkoutProcess()
     {
-       await this.header.clickOnCartIcon();
-       await this.page.click(this.checkoutButtonOnPopUp);
-       await expect(this.page).toHaveTitle('Checkout');
-       await this.page.check(this.existingAddressRadioButton);
-       await this.page.selectOption(this.addressDropDown,{index:1});
        await this.page.check(this.termsConditionCheckbox);
        await this.page.click(this.continueButton);
        await expect(this.page).toHaveTitle('Confirm Order');
@@ -50,6 +55,16 @@ exports.PlaceOrderPage = class PlaceOrderPage{
        await expect(this.page).toHaveTitle('Your Store');
     }
 
+    async placeOrderOnExistingAddress()
+    {
+       await this.header.clickOnCartIcon();
+       await this.page.click(this.checkoutButtonOnPopUp);
+       await expect(this.page).toHaveTitle('Checkout');
+       await this.page.check(this.existingAddressRadioButton);
+       await this.page.selectOption(this.addressDropDown,{index:1});
+       await this.checkoutProcess();
+    }
+
     async placeOrderOnNewAddress()
     {
        await this.header.clickOnCartIcon();
@@ -57,13 +72,7 @@ exports.PlaceOrderPage = class PlaceOrderPage{
        await expect(this.page).toHaveTitle('Checkout');
        await this.page.click(this.newAddressRadioButton);
        await this.enterNewAddressDetails();
-       await this.page.check(this.termsConditionCheckbox);
-       await this.page.click(this.continueButton);
-       await expect(this.page).toHaveTitle('Confirm Order');
-       await this.page.click(this.confirmOrderButton);
-       await expect(this.page).toHaveTitle('Your order has been placed!');
-       await this.page.click(this.continueShoppingButton);
-       await expect(this.page).toHaveTitle('Your Store');
+       await this.checkoutProcess();
     }
 
     async enterNewAddressDetails()
@@ -76,8 +85,37 @@ exports.PlaceOrderPage = class PlaceOrderPage{
         await this.page.locator(this.state).selectOption('Tamil Nadu');
     }
 
-    async placeOrderOnDifferentAddress()
+    async placeOrderOnDifferentShippingAndBillingAddress()
     {
+       await this.header.clickOnCartIcon();
+       await this.page.click(this.checkoutButtonOnPopUp);
+       await expect(this.page).toHaveTitle('Checkout');
+       await this.page.check(this.existingAddressRadioButton);
+       //select billing address
+       await this.page.selectOption(this.addressDropDown,{index:1});
+       //click on different address checkbox
+       await this.page.uncheck(this.differentShippingAddressCheckBox);
+       //select different shipping address
+       await this.page.selectOption(this.shippingAddressDropDown,{index:2});
+       await this.checkoutProcess();
+    }
 
+    async placeOrderOutOfStock()
+    {
+       await this.header.clickOnCartIcon();
+       await this.page.click(this.checkoutButtonOnPopUp);
+       await expect(this.page).toHaveTitle('Shopping Cart');
+       await expect(this.page.locator(this.notAvailableMsg)).toBeVisible();
+       await expect(this.page).toHaveTitle('Checkout');
+    }
+
+    async placeOrderWithEmptyCart()
+    {
+       await this.header.clickOnCartIcon();
+       await expect(this.page.getByText(this.emptyCartListMsg)).toBeVisible();
+       await this.page.click(this.checkoutButtonOnPopUp);
+       await expect(this.page).toHaveTitle('Shopping Cart');
+       await expect(this.page.locator(this.emptyCartMsgOnPage)).toBeVisible();
+       await expect(this.page).toHaveTitle('Checkout');
     }
 }
