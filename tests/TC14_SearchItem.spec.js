@@ -8,20 +8,20 @@ test.beforeEach('launch app',async({page})=>{
     await page.goto('/');
 })
 
-test.skip('validate user is able to search item with specified category',async({page})=>{
+test('validate user is able to search item with specified category',async({page})=>{
     header = new HeaderSectionPage(page);
     await header.searchProduct({item:"Apple",category:"Desktops"});
     //await header.searchProduct({item:"Apple"});
     //await header.searchProduct({category:"Desktops"});
 })
 
-test.skip('validate user is able to search item then select category on result page',async({page})=>{
+test('validate user is able to search item then select category on result page',async({page})=>{
     header = new HeaderSectionPage(page);
     await header.searchProduct({item:"Apple"});
     await header.selectCategoryOnSearchPage('Desktops');
 })
 
-test.skip('validate user is able to give keyword from search result page',async({page})=>{
+test('validate user is able to give keyword from search result page',async({page})=>{
     header = new HeaderSectionPage(page);
     await header.searchProduct({category:"Desktops"});
     await header.enterKeywordOnSearchPage('HTC');
