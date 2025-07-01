@@ -18,6 +18,11 @@ exports.HeaderSectionPage = class HeaderSectionPage{
         this.searchButton = '//button[text()="Search"]';
         this.categoryDropDown = '(//div[@class="dropdown search-category"])[1]/button';
         this.categorySelect='//div[@class="dropdown-menu dropdown-menu-left show"]';
+        this.searchPageCategoryDropDown = 'select[name="category_id"]';
+        this.searchPageSearchButton = 'input#button-search';
+        this.keywordField = '#input-search';
+        this.shopByCategoryIcon = '#entry_217832 a';
+        this.topCategoryList = '#widget-navbar-217841 ul li a div span';
     }
 
     //checking the visibility of element (genralize function)
@@ -112,6 +117,30 @@ exports.HeaderSectionPage = class HeaderSectionPage{
         
         
         await expect(this.page).toHaveTitle(title);
+    }
+
+    async selectCategoryOnSearchPage(category)
+    {
+        await this.page.locator(this.searchPageCategoryDropDown).selectOption(category);
+        await this.page.click(this.searchPageSearchButton);
+    }
+
+    async enterKeywordOnSearchPage(keyword)
+    {
+        await this.page.locator(this.keywordField).fill(keyword);
+        await this.page.click(this.searchPageSearchButton);
+        let title="Search - "+keyword;
+        await expect(this.page).toHaveTitle(title);
+    }
+
+    async shopByCategory(category)
+    {
+        await this.page.click(this.shopByCategoryIcon);
+        const element = await this.page.locator(this.topCategoryList).filter({
+                                                                hasText: category
+                                                             });
+        await element.click();
+        await expect(this.page).toHaveTitle(category);
     }
 
 }
